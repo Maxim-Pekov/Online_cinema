@@ -477,10 +477,17 @@ mark,
   content: "\2014 \00A0";
 }
 
+.img-movie-shots{
+  max-width: 450px;
+  height: auto;
+}
+
 .img-fluid {
   max-width: 100%;
   height: auto;
 }
+
+
 
 .img-thumbnail {
   padding: 0.25rem;
