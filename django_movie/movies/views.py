@@ -2,20 +2,18 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 from . import forms
-from .models import Movie
+from .models import Movie, Category
 
 
-# class MovieView(View):
-#
+# class MovieView(View):      #переписан в следующем классе
 #     def get(self, request):
 #         movies = Movie.objects.all()
 #         return render(request, 'movies/movie_list.html', context={'movie_list': movies})
 
 class MovieView(ListView):
-    # paginate_by = 2
+    # paginate_by = 2                           # отображать 2 фильма
     model = Movie
     queryset = Movie.objects.all()
-
 
 # class MovieDetailView(View):
 #     def get(self, request, slug):
