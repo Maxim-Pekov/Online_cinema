@@ -9,6 +9,10 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'url')  # Отображение нужных нам столбцов в Админ, порядок как сдесь
     list_display_links = ('id', 'name', 'url')  # Указывается поле которое будет ссылкой на выбранную категорию
 
+@admin.register(Genre)
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', 'url')
+
 
 class ReviewInline(admin.StackedInline):  # При выборе фильма показ его отзывов
     model = Reviews
