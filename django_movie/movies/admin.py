@@ -13,6 +13,10 @@ class CategoryAdmin(admin.ModelAdmin):
 class GenreAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'url')
 
+@admin.register(RatingStar)
+class RatingStarAdmin(admin.ModelAdmin):
+    list_display = ('value',)
+
 
 class ReviewInline(admin.StackedInline):  # При выборе фильма показ его отзывов
     model = Reviews

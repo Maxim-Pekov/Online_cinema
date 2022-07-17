@@ -57,20 +57,19 @@
                         <li style="list-style: none"><span><b>Сборы в мире:</b> {{movie.fees_in_world}}</span>
                         </li>
                         <li style="list-style: none">
-                            <a href="#"><b>Рейтинг:</b>
-                                <span class="fa fa-star" aria-hidden="true"
-                                      style="outline: none; cursor: inherit;"></span>
-                                <span class="fa fa-star" aria-hidden="true"
-                                      style="outline: none; cursor: inherit;"></span>
-                                <span class="fa fa-star" aria-hidden="true"
-                                      style="outline: none; cursor: inherit;"></span>
-                                <span class="fa fa-star" aria-hidden="true"
-                                      style="outline: none; cursor: inherit;"></span>
-                                <span class="fa fa-star" aria-hidden="true"
-                                      style="outline: none; cursor: inherit;"></span>
-                                <span class="editContent"
-                                      style="outline: none; cursor: inherit;">5.0</span>
-                            </a>
+                            <form action="{% url 'add_rating' %}" method="post" name="rating">
+                                <b>Рейтинг:</b>
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ movie.id }}" name="movie">
+                                <span class="rating">
+                                {% for k, v in star_form.fields.star.choices %}
+                                    <input id="rating{{ v }}" type="radio" name="star"
+                                           value="{{ k }}">
+                                    <label for="rating{{ v }}">{{ k }}</label>
+                                {% endfor %}
+                            </span>
+                                <span class="editContent">4.0</span>
+                            </form>
                         </li>
                         <div class="share-desc">
                             <div class="share">
@@ -132,7 +131,7 @@
                     <!-- contact form grid -->
                     <div class="contact-single">
                         <h3 class="editContent" style="outline: none; cursor: inherit;">
-                                    <span class="sub-tittle editContent">{{movie.reviews_set.count}}</span>Оставить отзыв</h3>
+                            <span class="sub-tittle editContent">{{movie.reviews_set.count}}</span>Оставить отзыв</h3>
                         <form action="{% url 'add_review' movie.id %}" method="post" class="mt-4" id="formReview">
                             {% csrf_token %}
                             <input type="hidden" name="parent" id="contactparent" value="">
@@ -172,7 +171,7 @@
             </div>
             {% for review in movie.get_reviews %}
             <div class="media py-5">
-                <img src="{% static 'images/sil.png' %}" class="mr-3 img-fluid" width="50" height="50" alt="image" >
+                <img src="{% static 'images/sil.png' %}" class="mr-3 img-fluid" width="50" height="50" alt="image">
                 <div class="media-body mt-4">
                     <h5 class="mt-0 editContent">
                         {{review.name}}
@@ -183,7 +182,7 @@
                     <a href="#formReview" onclick="addReview('{{review.name}}', '{{review.id}}')">Ответить</a>
 
 
-<!--                    Далее реализован ответ на отзывы-->
+                    <!--                    Далее реализован ответ на отзывы-->
                     {% for rev in review.reviews_set.all %}
                     <div class="media mt-5 editContent"
                          style="outline: none; cursor: inherit;">
@@ -206,12 +205,13 @@
             {% endfor %}
 
         </div>
-<!--        Скрипт для ответа на комент пользователя-->
+        <!--        Скрипт для ответа на комент пользователя-->
         <script>
             function addReview(name, id) {
                 document.getElementById('contactparent').value = id;
                 document.getElementById('contactcomment').innerText = `${name},`
             }
+
         </script>
 
 
