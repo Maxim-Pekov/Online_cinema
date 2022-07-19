@@ -9,6 +9,8 @@ from .models import Movie, Category, Actors, Genre, Rating, RatingStar
 
 
 class GenreYear():
+
+
     '''Жанры и года выхода фильмов, обработка этого класса в sidebar.html'''
 
     def get_genre(self):
@@ -17,14 +19,19 @@ class GenreYear():
     def get_year(self):
         return Movie.objects.filter(draft=False).values('year')
 
-
 class FilterMovieYear(ListView, GenreYear):
+    paginate_by = 2
     '''Фильтр по жанрам и годам , выбор в чекбоксах cidebar'''
     def get_queryset(self):
         queryset = Movie.objects.filter(Q(year__in=self.request.GET.getlist('year'))|
-                                        Q(genres__in=self.request.GET.getlist('genre')))
+                                        Q(genres__in=self.request.GET.getlist('genre'))
+                                        ).distinct()
         return queryset
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['year'] = ''.join([f'year={x}&' for x in self.request.GET.getlist('year')])
+        context['genre'] = ''.join([f'genre={x}&' for x in self.request.GET.getlist('genre')])
+        return context
 
 # class MovieView(View):      #переписан в следующем классе
 #     def get(self, request):
@@ -32,7 +39,7 @@ class FilterMovieYear(ListView, GenreYear):
 #         return render(request, 'movies/movie_list.html', context={'movie_list': movies})
 
 class MovieView(ListView, GenreYear):
-    # paginate_by = 2                           # отображать 2 фильма
+    paginate_by = 2   # отображать 2 фильма
     model = Movie
     queryset = Movie.objects.all()
 
